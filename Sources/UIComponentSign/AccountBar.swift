@@ -1,32 +1,35 @@
 //
-//  AccountBar.swift
+//  SignAccountBar.swift
 //
 //
 //  Created by X Tommy on 2022/10/14.
 //
 
 import Kingfisher
-import SnapKit
 import UIKit
+import SnapKit
 
-public class AccountBar: UIView {
+class AccountBar: UIView {
 
     public var avatarUrl: String? {
         didSet {
-            if let avatarUrl {
-                avatarImageView.kf.setImage(with: URL(string: avatarUrl))
-            } else {
-                avatarImageView.image = nil
-            }
+            onAvatarUrlChanged(url: avatarUrl)
         }
     }
 
     public var address: String? {
         didSet {
-            addressLabel.text = address
+            onAddressChanged(address: address)
         }
     }
 
+    override var tintColor: UIColor! {
+        didSet {
+            super.tintColor = tintColor
+            avatarImageView.backgroundColor = tintColor
+        }
+    }
+    
     public override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -34,12 +37,26 @@ public class AccountBar: UIView {
     }
 
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        
+        configureHierarchy()
     }
 
     private let avatarImageView = UIImageView()
     private let addressLabel = UILabel()
 
+    private func onAvatarUrlChanged(url: String?) {
+        if let avatarUrl {
+            avatarImageView.kf.setImage(with: URL(string: avatarUrl))
+        } else {
+            avatarImageView.image = nil
+        }
+    }
+    
+    private func onAddressChanged(address: String?) {
+        addressLabel.text = address
+    }
+    
 }
 
 extension AccountBar {
@@ -48,7 +65,7 @@ extension AccountBar {
 
         avatarImageView.layer.cornerRadius = 22
         avatarImageView.layer.masksToBounds = true
-        avatarImageView.backgroundColor = UIColor.accent
+        avatarImageView.backgroundColor = tintColor
         avatarImageView.contentMode = .scaleAspectFill
         addSubview(avatarImageView)
         avatarImageView.snp.makeConstraints { make in
@@ -57,7 +74,7 @@ extension AccountBar {
             make.width.height.equalTo(44)
         }
 
-        addressLabel.textColor = UIColor.label
+        addressLabel.textColor = UIColor.darkText
         addressLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         addSubview(addressLabel)
         addressLabel.snp.makeConstraints { make in

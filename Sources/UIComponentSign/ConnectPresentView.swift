@@ -1,34 +1,41 @@
 //
 //  ConnectPresentView.swift
-//
+//  
 //
 //  Created by X Tommy on 2023/1/11.
 //
 
-import Presentable
 import UIKit
+import Presentable
 
 public class ConnectPresentView: ProposalPresentView {
 
-    private lazy var messageView = ConnectMessageView()
-
+    private lazy var intentionView = ConnectIntentionView()
+        
     public override init(frame: CGRect) {
         super.init(frame: frame)
-
-        title = "Connect to this site?"
-        confirmButtonTitle = "Connect"
+        
+        configureHierarchy()
     }
-
+    
     required public init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        
+        configureHierarchy()
     }
-
+    
     public override var contentView: UIView? {
         set {
             super.contentView = newValue
         }
         get {
-            messageView
+            intentionView
         }
     }
+    
+    private func configureHierarchy() {
+        title = "Connect to this site?"
+        confirmButtonTitle = "Connect"
+    }
+    
 }

@@ -1,5 +1,5 @@
 //
-//  PersonalSignMessageView.swift
+//  SignMessageView.swift
 //
 //
 //  Created by X Tommy on 2022/10/14.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-public class SignMessageView: UIView {
+class SignMessageView: UIView {
 
     public var message: String? {
         didSet {
@@ -22,7 +22,9 @@ public class SignMessageView: UIView {
     }
 
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        
+        configureHierarchy()
     }
 
     private let titleLabel = UILabel()
@@ -34,7 +36,7 @@ extension SignMessageView {
 
     private func configureHierarchy() {
 
-        titleLabel.textColor = UIColor.label
+        titleLabel.textColor = UIColor.darkText
         titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         titleLabel.text = "Sign message"
         addSubview(titleLabel)
@@ -43,9 +45,7 @@ extension SignMessageView {
             make.top.equalToSuperview().offset(16)
         }
 
-        // rgba(63, 63, 70, 1)
-        contentLabel.textColor = UIColor(
-            displayP3Red: 63 / 256.0, green: 63 / 256.0, blue: 70 / 256.0, alpha: 1)
+        contentLabel.textColor = UIColor(displayP3Red: 63/256.0, green: 63/256.0, blue: 70/256.0, alpha: 1)
         contentLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
         contentLabel.numberOfLines = 5
         addSubview(contentLabel)
