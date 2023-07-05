@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="22C65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="ChannelDTO" representedClassName="ChannelDTO" syncable="YES" codeGenerationType="class">
+        <attribute name="avatarURL" optional="YES" attributeType="URI"/>
+        <attribute name="badge" optional="YES" attributeType="String"/>
+        <attribute name="fromUserId" optional="YES" attributeType="String"/>
+        <attribute name="isHidden" optional="YES" attributeType="Boolean" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="lastMessageAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lastMessageText" optional="YES" attributeType="String"/>
+        <attribute name="memberCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="topicId" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="messages" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MessageDTO" inverseName="channel" inverseEntity="MessageDTO"/>
+        <relationship name="previewMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MessageDTO" inverseName="previewOfChannel" inverseEntity="MessageDTO"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="topicId"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CurrentUserDTO" representedClassName="CurrentUserDTO" syncable="YES" codeGenerationType="class">
+        <attribute name="didType" optional="YES" attributeType="String"/>
+        <attribute name="didValue" optional="YES" attributeType="String"/>
+        <attribute name="lastSyncEventDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="privateKey" optional="YES" attributeType="String"/>
+        <attribute name="unreadMessageCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserDTO" inverseName="currentUser" inverseEntity="UserDTO"/>
+    </entity>
+    <entity name="MessageDTO" representedClassName="MessageDTO" syncable="YES" codeGenerationType="class">
+        <attribute name="cipherSuite" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="locallyCreatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="text" optional="YES" attributeType="String"/>
+        <attribute name="topicId" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="channel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ChannelDTO" inverseName="messages" inverseEntity="ChannelDTO"/>
+        <relationship name="messageStatus" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MessageStatusDTO" inverseName="message" inverseEntity="MessageStatusDTO"/>
+        <relationship name="previewOfChannel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ChannelDTO" inverseName="previewMessage" inverseEntity="ChannelDTO"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserDTO" inverseName="messages" inverseEntity="UserDTO"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="MessageStatusDTO" representedClassName="MessageStatusDTO" syncable="YES" codeGenerationType="class">
+        <attribute name="status" optional="YES" attributeType="String"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MessageDTO" inverseName="messageStatus" inverseEntity="MessageDTO"/>
+    </entity>
+    <entity name="UserDTO" representedClassName="UserDTO" syncable="YES" codeGenerationType="class">
+        <attribute name="avatarURL" optional="YES" attributeType="URI"/>
+        <attribute name="id" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="currentUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentUserDTO" inverseName="user" inverseEntity="CurrentUserDTO"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MessageDTO" inverseName="user" inverseEntity="MessageDTO"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+</model>
