@@ -9,7 +9,7 @@ import Combine
 import CryptoKit
 import Foundation
 
-@testable import DappMQ
+@testable import DappConnect
 @testable import Web3MQNetworking
 
 class MockWebSocket: WebSocketClient {

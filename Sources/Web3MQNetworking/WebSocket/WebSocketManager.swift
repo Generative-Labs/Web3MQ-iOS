@@ -123,6 +123,7 @@ public protocol WebSocketClient {
         topicId: String,
         messageType: Web3MQMessageType,
         cipherSuite: String,
+        needStore: Bool,
         userId: String,
         privateKey: Curve25519.Signing.PrivateKey
     ) async throws -> Web3MQMessage
@@ -145,6 +146,7 @@ extension WebSocketClient {
         topicId: String,
         messageType: Web3MQMessageType = .chat,
         cipherSuite: String = "NONE",
+        needStore: Bool = true,
         userId: String,
         privateKey: Curve25519.Signing.PrivateKey
     ) async throws -> Web3MQMessage {
@@ -186,7 +188,7 @@ extension WebSocketClient {
         message.contentTopic = topicId
         message.cipherSuite = cipherSuite
         message.timestamp = timestamp
-        message.needStore = true
+        message.needStore = needStore
         message.messageType = messageType.rawValue
         Log.print("debug:writeMessage:\((try? message.jsonString()) ?? "")")
         let bytes = try message.serializedData().bytes

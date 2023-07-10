@@ -8,7 +8,7 @@
 import CryptoKit
 import XCTest
 
-@testable import DappMQ
+@testable import DappConnect
 
 final class ClientTests: XCTestCase {
 

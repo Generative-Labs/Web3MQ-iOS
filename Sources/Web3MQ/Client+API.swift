@@ -52,8 +52,8 @@ extension ChatClient {
     }
 
     /// Retrieves user information for the user with the given `didType` and `didValue`.
-    public func userInfo(didType: String, didValue: String) async throws -> UserInfo? {
-        try await service.userInfo(didType: didType, didValue: didValue)
+    public func userInfo(did: DID) async throws -> UserInfo? {
+        try await service.userInfo(didType: did.type, didValue: did.value)
     }
 
     /// Gets the user ID associated with the given `didType` and `didValue`, or generates a new one if none exists.

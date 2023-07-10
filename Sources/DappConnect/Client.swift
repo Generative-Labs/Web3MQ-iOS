@@ -132,6 +132,10 @@ public class DappConnectClient: DappConnectClientProtocol {
         try await connector.connect(user: DappMQUser(privateKey: privateKey, topic: userId))
     }
 
+    public func disconnect() {
+        connector.disconnect()
+    }
+    
     public func cleanup() {
         DappMQSessionStorage.shared.removeAll()
         DappMQSessionProposalStorage.shared.removeAll()

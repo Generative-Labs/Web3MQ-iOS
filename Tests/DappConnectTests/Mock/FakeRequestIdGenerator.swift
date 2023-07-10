@@ -5,7 +5,7 @@
 //  Created by X Tommy on 2023/2/6.
 //
 
-import DappMQ
+import DappConnect
 import Foundation
 
 class FakeRequestIdGenerator: IdGenerator {

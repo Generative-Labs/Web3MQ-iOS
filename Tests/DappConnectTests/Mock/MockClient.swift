@@ -9,10 +9,10 @@ import Combine
 import CryptoKit
 import Foundation
 
-@testable import DappMQ
+@testable import DappConnect
 @testable import Web3MQNetworking
 
-class MockDappMQClient: DappMQClient {
+class MockDappMQClient: DappConnectClient {
 
     let peerPrivateKey = Curve25519.Signing.PrivateKey()
     

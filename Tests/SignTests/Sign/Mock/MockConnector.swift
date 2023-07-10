@@ -9,7 +9,7 @@ import Combine
 import CryptoKit
 import Foundation
 
-@testable import DappMQ
+@testable import DappConnect
 @testable import Web3MQNetworking
 
 class MockTimeoutConnector: DappMQConnector {
@@ -43,10 +43,10 @@ class MockConnector: DappMQConnector {
     //        requestSubject.eraseToAnyPublisher()
     //    }
     //
-    let newResponseSubject = PassthroughSubject<DappMQ.Response, Never>()
+    let newResponseSubject = PassthroughSubject<DappConnect.Response, Never>()
     //
     override
-        var responsePublisher: AnyPublisher<DappMQ.Response, Never>
+        var responsePublisher: AnyPublisher<DappConnect.Response, Never>
     {
         newResponseSubject.eraseToAnyPublisher()
     }

@@ -7,7 +7,7 @@
 
 import XCTest
 
-@testable import DappMQ
+@testable import DappConnect
 @testable import Web3MQNetworking
 
 final class ClientTests: XCTestCase {
