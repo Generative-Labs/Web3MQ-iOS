@@ -12,11 +12,11 @@ import UIKit
 import Web3MQNetworking
 
 public struct DappMQUser {
-    
+
     public let privateKey: Curve25519.Signing.PrivateKey
-    
+
     public let topic: String
-    
+
 }
 
 public protocol Connector {
@@ -64,7 +64,7 @@ public protocol Connector {
 
 ///
 public class DappMQConnector: Connector {
-        
+
     public var currentURL: URL? {
         webSocket.currentURL
     }
@@ -78,11 +78,11 @@ public class DappMQConnector: Connector {
 
     ///
     let metadata: AppMetadata
-    
+
     private var url: URL?
-    
+
     private var nodeId: NodeId?
-    
+
     private var user: DappMQUser?
 
     ///
@@ -100,7 +100,7 @@ public class DappMQConnector: Connector {
         self.webSocket = websocket
         bindEvents()
     }
-    
+
     public func connect(user: DappMQUser) async throws {
         self.nodeId = try await webSocket.bridgeConnect(
             url: url,
@@ -152,7 +152,7 @@ public class DappMQConnector: Connector {
     public let connectionStatusSubject = CurrentValueSubject<ConnectionStatus, Never>(.idle)
 
     public func disconnect() {
-        webSocket.disconnect(source: .user) { }
+        webSocket.disconnect(source: .user) {}
         user = nil
     }
 
@@ -161,11 +161,11 @@ public class DappMQConnector: Connector {
         guard let session = DappMQSessionStorage.shared.getSession(forTopic: topic) else {
             throw DappMQError.invalidSession
         }
-        
+
         guard let user else {
             throw DappMQError.userDisconnect
         }
-        
+
         return try await send(
             content: content,
             topic: topic,
@@ -202,9 +202,11 @@ public class DappMQConnector: Connector {
 // MARK: - Basics
 
 extension DappMQConnector {
-    
+
     ///
-    public func createURI(request: SessionProposalRPCRequest, privateKey: Curve25519.Signing.PrivateKey) -> DappMQURI {
+    public func createURI(
+        request: SessionProposalRPCRequest, privateKey: Curve25519.Signing.PrivateKey
+    ) -> DappMQURI {
         let topic = Web3MQDefaultUserIdGenerator.userId(
             appId: appId, publicKeyBase64String: privateKey.publicKeyBase64String)
         return DappMQURI(

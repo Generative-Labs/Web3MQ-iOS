@@ -33,7 +33,7 @@ public enum DappMQError: Error {
 
     ///
     case userDisconnect
-    
+
 }
 
 ///Create QRCode and make temp connection,

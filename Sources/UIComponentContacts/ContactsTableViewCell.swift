@@ -5,35 +5,35 @@
 //  Created by X Tommy on 2023/1/20.
 //
 
-import UIKit
-import UIComponentCore
-import Web3MQ
-import SnapKit
 import Kingfisher
+import SnapKit
+import UIComponentCore
+import UIKit
+import Web3MQ
 import Web3MQServices
 
 class ContactsTableViewCell: UITableViewCell, Reusable {
 
     private let avatarImageView = UIImageView()
-    
+
     private let nameLabel = UILabel()
-    
+
     private let accessoryButton = FollowButton()
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         configureHierarchy()
         bindEvents()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        
+
         configureHierarchy()
         bindEvents()
     }
-    
+
     @objc
     private func onTappedAccessoryButton() {
         guard let tapped else {
@@ -41,13 +41,14 @@ class ContactsTableViewCell: UITableViewCell, Reusable {
         }
         tapped()
     }
-    
+
     private func bindEvents() {
-        accessoryButton.addTarget(self, action: #selector(onTappedAccessoryButton), for: .touchUpInside)
+        accessoryButton.addTarget(
+            self, action: #selector(onTappedAccessoryButton), for: .touchUpInside)
     }
-    
+
     private var tapped: (() -> Void)?
-    
+
     func render(contactsUser: ContactUser, type: ContactsType, tapped: @escaping () -> Void) {
         self.tapped = tapped
         avatarImageView.kf.setImage(with: URL(string: contactsUser.avatarUrl ?? ""))
@@ -59,13 +60,13 @@ class ContactsTableViewCell: UITableViewCell, Reusable {
             accessoryButton.isFollowing = true
         }
     }
-    
+
 }
 
 extension ContactsTableViewCell {
-    
+
     private func configureHierarchy() {
-        
+
         avatarImageView.layer.cornerRadius = 20
         avatarImageView.layer.masksToBounds = true
         contentView.addSubview(avatarImageView)
@@ -74,7 +75,7 @@ extension ContactsTableViewCell {
             make.centerY.equalToSuperview()
             make.width.height.equalTo(40)
         }
-        
+
         nameLabel.textColor = UIColor.label
         nameLabel.font = UIFont.preferredFont(forTextStyle: .footnote).bold()
         contentView.addSubview(nameLabel)
@@ -82,7 +83,7 @@ extension ContactsTableViewCell {
             make.left.equalTo(avatarImageView.snp.right).offset(12)
             make.centerY.equalToSuperview()
         }
-                
+
         accessoryButton.layer.cornerRadius = 6
         accessoryButton.layer.masksToBounds = true
         accessoryButton.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -93,7 +94,7 @@ extension ContactsTableViewCell {
             make.width.equalTo(75)
             make.left.greaterThanOrEqualTo(nameLabel.snp.right).offset(16)
         }
-        
+
     }
-    
+
 }

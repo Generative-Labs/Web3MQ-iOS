@@ -45,7 +45,7 @@ public class ChatClient {
     public var messagePublisher: AnyPublisher<Web3MQMessage, Never> {
         messageSubject.eraseToAnyPublisher()
     }
-    
+
     public var messageStatusPublisher: AnyPublisher<Web3MQMessageStatusItem, Never> {
         messageStatusSubject.eraseToAnyPublisher()
     }

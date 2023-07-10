@@ -15,18 +15,19 @@ public enum ContactsType {
 }
 
 public struct ContactsQuery {
-    
+
     ///
     public let type: ContactsType
 
     /// A pagination.
     public var pagination: Pagination
-    
-    public init(type: ContactsType,
-                pageSize: Int = Int.chatsPageSize) {
+
+    public init(
+        type: ContactsType,
+        pageSize: Int = Int.chatsPageSize
+    ) {
         self.type = type
         pagination = Pagination(pageSize: pageSize)
     }
-    
-}
 
+}

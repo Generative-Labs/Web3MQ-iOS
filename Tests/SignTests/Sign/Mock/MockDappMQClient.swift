@@ -11,8 +11,13 @@ import Foundation
 
 class MockDappMQClient: DappConnectClient {
 
-    required init(appId: String, metadata: AppMetadata, endpoint: URL? = nil, keyStorage: KeyStorage? = nil, connector: Connector? = nil, requestIdGenerator: IdGenerator? = nil) {
-        super.init(appId: appId, metadata: metadata, endpoint: endpoint, keyStorage: keyStorage, connector: connector, requestIdGenerator: requestIdGenerator)
+    required init(
+        appId: String, metadata: AppMetadata, endpoint: URL? = nil, keyStorage: KeyStorage? = nil,
+        connector: Connector? = nil, requestIdGenerator: IdGenerator? = nil
+    ) {
+        super.init(
+            appId: appId, metadata: metadata, endpoint: endpoint, keyStorage: keyStorage,
+            connector: connector, requestIdGenerator: requestIdGenerator)
     }
 }
 

@@ -64,7 +64,7 @@ class MockConnector: DappMQConnector {
     }
 
     override
-    func connect(user: DappMQUser) async throws
+        func connect(user: DappMQUser) async throws
     {
         try await Task.sleep(nanoseconds: 100_000_000)
         connectionStatusSubject.send(Web3MQNetworking.ConnectionStatus.connected(nodeId: "nodeID"))

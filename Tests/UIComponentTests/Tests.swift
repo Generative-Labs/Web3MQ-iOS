@@ -1,12 +1,12 @@
 //
 //  Tests.swift
-//  
+//
 //
 //  Created by X Tommy on 2023/1/16.
 //
 
-import XCTest
 import UIComponentSign
+import XCTest
 
 final class Tests: XCTestCase {
 

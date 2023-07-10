@@ -1,43 +1,43 @@
 //
 //  MessageView.swift
-//  
+//
 //
 //  Created by X Tommy on 2023/1/11.
 //
 
-import UIKit
 import SnapKit
+import UIKit
 
 class ConnectIntentionView: UIView {
 
     private let contentView = UIStackView()
-    
+
     private let messageLabel0 = UIButton()
     private let messageLabel1 = UIButton()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         configureHierarchy()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        
+
         configureHierarchy()
     }
-    
+
 }
 
 extension ConnectIntentionView {
-    
+
     private func configureHierarchy() {
-        
+
         layer.cornerRadius = 8
         layer.masksToBounds = true
         layer.borderWidth = 1
         layer.borderColor = UIColor.border.cgColor
-        
+
         contentView.alignment = .leading
         contentView.axis = .vertical
         contentView.spacing = 8
@@ -48,7 +48,7 @@ extension ConnectIntentionView {
             make.top.equalToSuperview().offset(16)
             make.bottom.equalToSuperview().offset(-16)
         }
-                
+
         messageLabel0.isUserInteractionEnabled = false
         messageLabel0.imageEdgeInsets = UIEdgeInsets(top: 0, left: -6, bottom: 0, right: 0)
         messageLabel0.setTitleColor(UIColor.label, for: .normal)
@@ -56,7 +56,7 @@ extension ConnectIntentionView {
         messageLabel0.setTitle("View your wallet balance and activities", for: .normal)
         messageLabel0.titleLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
         contentView.addArrangedSubview(messageLabel0)
-        
+
         messageLabel1.isUserInteractionEnabled = false
         messageLabel1.imageEdgeInsets = UIEdgeInsets(top: 0, left: -6, bottom: 0, right: 0)
         messageLabel1.setTitleColor(UIColor.label, for: .normal)
@@ -64,7 +64,7 @@ extension ConnectIntentionView {
         messageLabel1.setTitle("Request for approval of transaction", for: .normal)
         messageLabel1.titleLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
         contentView.addArrangedSubview(messageLabel1)
-        
+
     }
-    
+
 }

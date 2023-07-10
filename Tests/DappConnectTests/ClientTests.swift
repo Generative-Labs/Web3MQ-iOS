@@ -27,7 +27,7 @@ final class ClientTests: XCTestCase {
     var client: MockDappMQClient!
 
     var staticRequestId = "test_request_id"
-    
+
     override func setUp() async throws {
 
         fakeRequestIdGenerator = FakeRequestIdGenerator(staticRequestId: staticRequestId)
@@ -64,15 +64,17 @@ final class ClientTests: XCTestCase {
 
         connector = DappMQConnector(appId: appId, metadata: appMetadata, websocket: websocket)
 
-        client = MockDappMQClient(appId: appId, metadata: appMetadata, connector: connector, requestIdGenerator: fakeRequestIdGenerator)
-        
+        client = MockDappMQClient(
+            appId: appId, metadata: appMetadata, connector: connector,
+            requestIdGenerator: fakeRequestIdGenerator)
+
         try await client.connect()
 
         DappMQConfiguration.timeoutInterval = 6
         DappMQConfiguration.sessionLifeTimeInterval = 60
 
     }
-    
+
     func testConnectWalletApprove() async throws {
         try await withThrowingTaskGroup(of: Void.self) { group in
             group.addTask {

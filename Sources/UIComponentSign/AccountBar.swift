@@ -6,8 +6,8 @@
 //
 
 import Kingfisher
-import UIKit
 import SnapKit
+import UIKit
 
 class AccountBar: UIView {
 
@@ -29,7 +29,7 @@ class AccountBar: UIView {
             avatarImageView.backgroundColor = tintColor
         }
     }
-    
+
     public override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -38,7 +38,7 @@ class AccountBar: UIView {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        
+
         configureHierarchy()
     }
 
@@ -52,11 +52,11 @@ class AccountBar: UIView {
             avatarImageView.image = nil
         }
     }
-    
+
     private func onAddressChanged(address: String?) {
         addressLabel.text = address
     }
-    
+
 }
 
 extension AccountBar {

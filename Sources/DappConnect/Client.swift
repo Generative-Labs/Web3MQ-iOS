@@ -69,7 +69,7 @@ public class DappConnectClient: DappConnectClientProtocol {
 
     ///
     var connector: Connector
-    
+
     public let requestIdGenerator: IdGenerator
 
     public let keyStorage: KeyStorage
@@ -128,14 +128,15 @@ public class DappConnectClient: DappConnectClientProtocol {
 
     public func connect() async throws {
         let privateKey = keyStorage.privateKey
-        let userId = Web3MQDefaultUserIdGenerator.userId(appId: appId, publicKeyBase64String: privateKey.publicKeyBase64String)
+        let userId = Web3MQDefaultUserIdGenerator.userId(
+            appId: appId, publicKeyBase64String: privateKey.publicKeyBase64String)
         try await connector.connect(user: DappMQUser(privateKey: privateKey, topic: userId))
     }
 
     public func disconnect() {
         connector.disconnect()
     }
-    
+
     public func cleanup() {
         DappMQSessionStorage.shared.removeAll()
         DappMQSessionProposalStorage.shared.removeAll()

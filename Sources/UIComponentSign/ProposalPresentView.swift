@@ -1,36 +1,36 @@
 //
 //  SignProposalPresentView.swift
-//  
+//
 //
 //  Created by X Tommy on 2023/1/11.
 //
 
-import UIKit
-import Presentable
 import Kingfisher
+import Presentable
+import UIKit
 
 public class ProposalPresentView: PresentableView {
-    
+
     open override var transition: PresentableTransitionType {
         return .bottom
     }
-    
+
     open override var shouldDismissIfTappedBlankArea: Bool {
         false
     }
-    
+
     public var accountAddress: String? {
         didSet {
             accountBar.address = "Account(\(accountAddress ?? "")"
         }
     }
-    
+
     public var accountAvatarUrl: String? {
         didSet {
             accountBar.avatarUrl = accountAvatarUrl
         }
     }
-    
+
     public var avatarUrl: String? {
         didSet {
             if let avatarUrl {
@@ -40,13 +40,13 @@ public class ProposalPresentView: PresentableView {
             }
         }
     }
-     
+
     public var websiteUrl: String? {
         didSet {
             websiteLabel.text = websiteUrl
         }
     }
-        
+
     open var contentView: UIView?
 
     public var confirmButtonTitle: String? {
@@ -54,7 +54,7 @@ public class ProposalPresentView: PresentableView {
             confirmButton.setTitle(confirmButtonTitle, for: .normal)
         }
     }
-    
+
     public var cancelButtonTitle: String? {
         didSet {
             cancelButton.setTitle(cancelButtonTitle, for: .normal)
@@ -66,7 +66,7 @@ public class ProposalPresentView: PresentableView {
             titleLabel.text = title
         }
     }
-    
+
     public override var tintColor: UIColor! {
         didSet {
             super.tintColor = tintColor
@@ -75,34 +75,34 @@ public class ProposalPresentView: PresentableView {
             confirmButton.backgroundColor = tintColor
         }
     }
-    
+
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         configureHierarchy()
         bindEvents()
     }
-    
+
     required public init?(coder: NSCoder) {
         super.init(coder: coder)
-        
+
         configureHierarchy()
         bindEvents()
     }
-    
+
     private let titleImageView = UIImageView()
     private let websiteStackView = UIStackView()
     private let websiteImageView = UIImageView(image: UIImage(systemName: "lock.fill"))
     private let websiteLabel = UILabel()
-    
+
     private let titleLabel = UILabel()
     private let accountBar = AccountBar()
     private let stackView = UIStackView()
     private let cancelButton = UIButton()
     private let confirmButton = UIButton()
-    
+
     private var continuation: UnsafeContinuation<Bool, Never>?
-    
+
     /// return true or false
     public func asyncPresent() async -> Bool {
         self.present()
@@ -110,18 +110,18 @@ public class ProposalPresentView: PresentableView {
             self?.continuation = continuation
         })
     }
-    
+
 }
 
 extension ProposalPresentView {
-    
+
     private func configureHierarchy() {
-        
+
         backgroundColor = UIColor.white
         layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         layer.cornerRadius = 16
         layer.masksToBounds = true
-        
+
         titleImageView.layer.cornerRadius = 32
         titleLabel.layer.masksToBounds = true
         titleImageView.backgroundColor = tintColor
@@ -132,7 +132,7 @@ extension ProposalPresentView {
             make.top.equalToSuperview().offset(16)
             make.width.height.equalTo(64)
         }
-        
+
         websiteStackView.axis = .horizontal
         websiteStackView.spacing = 8.4
         addSubview(websiteStackView)
@@ -140,17 +140,17 @@ extension ProposalPresentView {
             make.centerX.equalToSuperview()
             make.top.equalTo(titleImageView.snp.bottom).offset(12)
         }
-        
+
         websiteImageView.contentMode = .scaleAspectFit
         websiteStackView.addArrangedSubview(websiteImageView)
         websiteImageView.snp.makeConstraints { make in
             make.size.equalTo(CGSize(width: 12, height: 12))
         }
-        
+
         websiteLabel.textColor = UIColor.label
         websiteLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
         websiteStackView.addArrangedSubview(websiteLabel)
-        
+
         titleLabel.text = "Sign this message？"
         titleLabel.textColor = UIColor.darkText
         titleLabel.font = UIFont.preferredFont(forTextStyle: .title3)
@@ -159,7 +159,7 @@ extension ProposalPresentView {
             make.centerX.equalToSuperview()
             make.top.equalTo(websiteStackView.snp.bottom).offset(16)
         }
-        
+
         addSubview(accountBar)
         accountBar.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(16)
@@ -167,7 +167,7 @@ extension ProposalPresentView {
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.height.equalTo(66)
         }
-        
+
         if let contentView {
             addSubview(contentView)
             contentView.snp.makeConstraints { make in
@@ -175,7 +175,7 @@ extension ProposalPresentView {
                 make.right.equalToSuperview().offset(-16)
                 make.top.equalTo(accountBar.snp.bottom).offset(16)
             }
-            
+
             stackView.axis = .horizontal
             stackView.spacing = 32
             stackView.distribution = .fillEqually
@@ -186,7 +186,7 @@ extension ProposalPresentView {
                 make.top.equalTo(contentView.snp.bottom).offset(16)
                 make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-32)
             }
-            
+
             cancelButton.layer.cornerRadius = 8
             cancelButton.layer.borderWidth = 1
             cancelButton.layer.borderColor = UIColor.border.cgColor
@@ -198,7 +198,7 @@ extension ProposalPresentView {
             cancelButton.snp.makeConstraints { make in
                 make.height.equalTo(40)
             }
-            
+
             confirmButton.layer.cornerRadius = 8
             confirmButton.backgroundColor = tintColor
             confirmButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .callout)
@@ -208,27 +208,27 @@ extension ProposalPresentView {
             confirmButton.snp.makeConstraints { make in
                 make.height.equalTo(40)
             }
-            
+
             stackView.addArrangedSubview(cancelButton)
             stackView.addArrangedSubview(confirmButton)
         }
     }
-    
+
     private func bindEvents() {
         cancelButton.addTarget(self, action: #selector(onCanceled), for: .touchUpInside)
         confirmButton.addTarget(self, action: #selector(onConfirmed), for: .touchUpInside)
     }
-    
+
     @objc
     private func onCanceled() {
         continuation?.resume(returning: false)
         dismiss()
     }
-    
+
     @objc
     private func onConfirmed() {
         continuation?.resume(returning: true)
         dismiss()
     }
-    
+
 }

@@ -23,7 +23,7 @@ class SignMessageView: UIView {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        
+
         configureHierarchy()
     }
 
@@ -45,7 +45,8 @@ extension SignMessageView {
             make.top.equalToSuperview().offset(16)
         }
 
-        contentLabel.textColor = UIColor(displayP3Red: 63/256.0, green: 63/256.0, blue: 70/256.0, alpha: 1)
+        contentLabel.textColor = UIColor(
+            displayP3Red: 63 / 256.0, green: 63 / 256.0, blue: 70 / 256.0, alpha: 1)
         contentLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
         contentLabel.numberOfLines = 5
         addSubview(contentLabel)

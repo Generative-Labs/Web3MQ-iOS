@@ -15,11 +15,16 @@ import Foundation
 class MockDappMQClient: DappConnectClient {
 
     let peerPrivateKey = Curve25519.Signing.PrivateKey()
-    
-    required init(appId: String, metadata: AppMetadata, endpoint: URL? = nil, keyStorage: KeyStorage? = nil, connector: Connector? = nil, requestIdGenerator: IdGenerator? = nil) {
-        super.init(appId: appId, metadata: metadata, endpoint: endpoint, keyStorage: keyStorage, connector: connector, requestIdGenerator: requestIdGenerator)
+
+    required init(
+        appId: String, metadata: AppMetadata, endpoint: URL? = nil, keyStorage: KeyStorage? = nil,
+        connector: Connector? = nil, requestIdGenerator: IdGenerator? = nil
+    ) {
+        super.init(
+            appId: appId, metadata: metadata, endpoint: endpoint, keyStorage: keyStorage,
+            connector: connector, requestIdGenerator: requestIdGenerator)
     }
-    
+
     func messageForApproveSessionProposal(
         proposalId: String,
         sessionNamespace: [String: SessionNamespace]
