@@ -91,7 +91,7 @@ extension ChatsListTableViewCell {
     private func configureHierarchy() {
 
         avatarImageView.image = UIImage(systemName: "person.circle.fill")
-        avatarImageView.backgroundColor = UIComponentConfiguration.shared.accentColor
+        avatarImageView.backgroundColor = UIComponentConfiguration.shared.colorPalette.accentColor
         avatarImageView.contentMode = .scaleAspectFit
         contentView.addSubview(avatarImageView)
         avatarImageView.snp.makeConstraints { make in
@@ -122,25 +122,25 @@ extension ChatsListTableViewCell {
         bottomBarStackView.distribution = .fill
         bottomBarStackView.spacing = 12
 
-        titleLabel.textColor = UIColor.label
+        titleLabel.textColor = UIComponentConfiguration.shared.colorPalette.labelColor
         titleLabel.font = UIFont.preferredFont(forTextStyle: .callout).bold()
         topBarStackView.addArrangedSubview(titleLabel)
         titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
         dateLabel.textAlignment = .right
-        dateLabel.textColor = UIColor.tertiaryLabel
+        dateLabel.textColor = UIComponentConfiguration.shared.colorPalette.tertiaryLabelColor
         dateLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
         topBarStackView.addArrangedSubview(dateLabel)
 
         contentLabel.numberOfLines = 1
-        contentLabel.textColor = UIColor.label
+        contentLabel.textColor = UIComponentConfiguration.shared.colorPalette.labelColor
         contentLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
         bottomBarStackView.addArrangedSubview(contentLabel)
 
         unreadCountLabel.layer.cornerRadius = 9
         unreadCountLabel.layer.masksToBounds = true
         unreadCountLabel.textColor = UIColor.white
-        unreadCountLabel.backgroundColor = UIColor.systemRed
+        unreadCountLabel.backgroundColor = UIComponentConfiguration.shared.colorPalette.errorColor
         unreadCountLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
         unreadCountLabel.textInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
         unreadCountLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
