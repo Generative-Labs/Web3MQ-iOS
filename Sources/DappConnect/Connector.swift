@@ -64,7 +64,7 @@ public protocol Connector {
 
 ///
 public class DappMQConnector: Connector {
-
+    
     public var currentURL: URL? {
         webSocket.currentURL
     }

@@ -18,10 +18,10 @@ enum WebSocketPingEvent {
 class WebSocketPingManager {
 
     /// The time interval to ping connection to keep it alive.
-    static let pingTimeInterval: TimeInterval = 60
+    static let pingTimeInterval: TimeInterval = 20
 
     /// The time interval for pong timeout.
-    static let pongTimeoutTimeInterval: TimeInterval = 20
+    static let pongTimeoutTimeInterval: TimeInterval = 10
 
     private let timerType: Timer.Type
     private let timerQueue: DispatchQueue

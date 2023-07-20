@@ -76,7 +76,7 @@ extension ContactsTableViewCell {
             make.width.height.equalTo(40)
         }
 
-        nameLabel.textColor = UIColor.label
+        nameLabel.textColor = UIComponentConfiguration.shared.colorPalette.labelColor
         nameLabel.font = UIFont.preferredFont(forTextStyle: .footnote).bold()
         contentView.addSubview(nameLabel)
         nameLabel.snp.makeConstraints { make in

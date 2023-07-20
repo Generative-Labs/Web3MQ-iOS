@@ -29,10 +29,6 @@ public struct HTTPSession: Web3MQChatSession {
         self.nodeId = nodeId
     }
 
-    //    public func updateNodeId(_ nodeId: String?) {
-    //        self.nodeId = nodeId
-    //    }
-
 }
 
 ///

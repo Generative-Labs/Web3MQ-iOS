@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  WebSocketClient.swift
 //
 //
 //  Created by X Tommy on 2023/1/7.
@@ -25,7 +25,7 @@ public enum ConnectionStatus {
     case waitingForNodeId
 
     /// The connection is successful and nodeId is returned
-    case connected(nodeId: String?)
+    case connected(nodeId: String?, viability: Bool)
 
     /// The connection has been disconnected
     case disconnected(source: DisconnectionSource)
@@ -41,15 +41,17 @@ public enum ConnectionStatus {
         /// The system initiated web socket disconnecting.
         case system
 
-        /// didn't get a pong response.
+        /// Didn't get a pong response.
         case noPongReceived
     }
 
     /// Checks if the connection state is connected.
     public var isConnected: Bool {
-        if case .connected = self {
-            return true
+        if case .connected(_, let viability) = self {
+            print("debug:isConnected:\(viability)")
+            return viability
         }
+        print("debug:isConnected:\(false)")
         return false
     }
 
@@ -94,7 +96,7 @@ public protocol WebSocketClient {
     var currentURL: URL? { get }
 
     var currentNodeId: String? { get }
-
+            
     func connectWebSocket(URL: URL) async throws
 
     func connect(
@@ -200,17 +202,15 @@ extension WebSocketClient {
 
 ///
 public class WebSocketManager: WebSocketClient {
-
+       
     private var subscriptions: Set<AnyCancellable> = []
 
     var websocket: WebSocket?
 
-    public var isConnected: Bool {
-        connectionStatusSubject.value.isConnected
-    }
-
     public var connectionStatusSubject = CurrentValueSubject<ConnectionStatus, Never>(.idle)
-
+    
+    public var viabilitySubject = CurrentValueSubject<Bool, Never>(true)
+    
     private let timerType: Timer.Type = DefaultTimer.self
 
     private var retryTimer: TimerControl?
@@ -271,7 +271,7 @@ public class WebSocketManager: WebSocketClient {
     let messageStatusSubject = PassthroughSubject<Web3MQMessageStatusItem, Never>()
 
     private func findWebSocketURL(value: URL?) async -> URL {
-        return value ?? Endpoint.devSg1.websocketURL
+        return value ?? Endpoint.devUsWest2.websocketURL
     }
 
     @discardableResult
@@ -314,7 +314,7 @@ public class WebSocketManager: WebSocketClient {
             privateKey: privateKey)
     }
 
-    /// 若没有抛出异常，则表示连接成功
+    /// If throws no error, it means connect success.
     public func connectWebSocket(URL: URL) async throws {
         websocket = WebSocket(request: URLRequest(url: URL), useCustomEngine: true)
         websocket?.delegate = self
@@ -404,7 +404,7 @@ public class WebSocketManager: WebSocketClient {
             queue: .main
         ) { [weak self] in
             Log.print("Firing timer for a reconnect")
-            self?.reconnectIfNeeded()
+            self?.doReconnect()
         }
     }
 
@@ -417,8 +417,8 @@ public class WebSocketManager: WebSocketClient {
         retryTimer = nil
     }
 
-    private func reconnectIfNeeded() {
-        guard canReconnectAutomatically(), let currentURL else { return }
+    private func doReconnect() {
+        guard let currentURL else { return }
         switch mode {
         case .`default`:
             guard let privateKey, let userId else {
@@ -432,7 +432,7 @@ public class WebSocketManager: WebSocketClient {
             bridgeReconnect(url: currentURL, appId: appId, userId: userId, privateKey: privateKey)
         }
     }
-
+    
     private func defaultReconnect(
         url: URL, userId: String, privateKey: Curve25519.Signing.PrivateKey
     ) {
@@ -530,10 +530,10 @@ extension WebSocketManager: WebSocketDelegate {
             didReceiveMessage(messageType: type, content: Array(bytes))
         case .text(_):
             break
-        case .viabilityChanged(_):
-            break
+        case .viabilityChanged(let viability):
+            onViabilityChanged(viability)
         case .reconnectSuggested(_):
-            break
+            doReconnect()
         case .cancelled:
             connectionStatusSubject.send(.disconnected(source: .system))
         case .error(let error):
@@ -542,6 +542,16 @@ extension WebSocketManager: WebSocketDelegate {
             pingManager.pongReceived()
         default:
             break
+        }
+    }
+    
+    private func onViabilityChanged(_ viability: Bool) {
+        self.viabilitySubject.send(viability)
+        Log.print("debug:onViabilityChanged:\(viability)")
+        if case .connected(let nodeId, let v) = connectionStatusSubject.value {
+            if (v != viability) {
+                connectionStatusSubject.send(.connected(nodeId: nodeId, viability: viability))
+            }
         }
     }
 
@@ -555,7 +565,7 @@ extension WebSocketManager: WebSocketDelegate {
         case .connectResponse:
             let command = try? Pb_ConnectCommand(contiguousBytes: content)
             Log.print("debug:connectResponse:NodeID:\(command?.nodeID ?? "")")
-            connectionStatusSubject.send(.connected(nodeId: command?.nodeID))
+            connectionStatusSubject.send(.connected(nodeId: command?.nodeID, viability: true))
             if let nodeId = command?.nodeID {
                 currentNodeId = nodeId
                 connectNodeIdContinuation?.resume(returning: nodeId)
@@ -564,7 +574,7 @@ extension WebSocketManager: WebSocketDelegate {
         case .bridgeConnectResponse:
             let command = try? Pb_BridgeConnectCommand(contiguousBytes: content)
             Log.print("debug:bridgeConnectResponse:NodeID:\(command?.nodeID ?? "")")
-            connectionStatusSubject.send(.connected(nodeId: command?.nodeID))
+            connectionStatusSubject.send(.connected(nodeId: command?.nodeID, viability: true))
             if let nodeId = command?.nodeID {
                 currentNodeId = nodeId
                 tempConnectNodeIdContinuation?.resume(returning: nodeId)
@@ -601,9 +611,9 @@ extension WebSocketManager: WebSocketDelegate {
 
         default: break
         }
-
+        
         // reset ping timer if receives message.
-        pingManager.connectionStateDidChange(.connected(nodeId: nil))
+        pingManager.connectionStateDidChange(.connected(nodeId: currentNodeId, viability: true))
     }
 }
 
@@ -622,21 +632,13 @@ extension WebSocketManager {
     }
 
     private func bindEvents() {
-
-        NotificationCenter.default.addObserver(
-            forName: UIApplication.willEnterForegroundNotification, object: nil, queue: nil
-        ) { [weak self] _ in
-            guard let _ = self?.websocket?.request else {
-                return
-            }
-            self?.scheduleReconnectionTimerIfNeeded()
-        }
-
         connectionStatusSubject.sink { [weak self] status in
             self?.pingManager.connectionStateDidChange(status)
             switch status {
             case .connecting:
                 self?.cancelReconnectionTimer()
+            case .connected(_, _):
+                self?.retryStrategy.resetConsecutiveFailures()
             case .disconnected(let source):
                 if case .user = source {
                     return

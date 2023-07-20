@@ -95,7 +95,7 @@ public protocol Web3MQRequest: URLRequestConvertible {
 extension Web3MQRequest {
 
     public var baseURL: URL {
-        return URL(string: "https://\(Endpoint.devSg1.rawValue)")!
+        return URL(string: "https://\(Endpoint.devUsWest2.rawValue)")!
     }
 
     public var contentType: ContentType {

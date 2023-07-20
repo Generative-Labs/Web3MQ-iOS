@@ -84,10 +84,18 @@ extension ChatClient {
     }
 
     /// Retrieves the user permissions for the user with the given `userId`.
-    public func userPermissions(userId: String) async throws -> UserPermissions {
+    public func userPermissions(userId: String) async throws -> PermissionResponse {
         try await service.userPermissions(userId: userId)
     }
-
+    
+    public func permissions() async throws -> UserPermissions {
+        try await service.permissions()
+    }
+    
+    public func updatePermissions(permissions: UserPermissions) async throws {
+        try await service.updatePermissionSettings(permissions: permissions)
+    }
+    
     /// Changes the current user's profile information.
     public func changeProfile(nickName: String, avatarUrl: String?) async throws -> UserProfile {
         try await service.changeProfile(nickName: nickName, avatarUrl: avatarUrl)

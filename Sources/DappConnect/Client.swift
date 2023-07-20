@@ -82,7 +82,7 @@ public class DappConnectClient: DappConnectClientProtocol {
     public var latestSession: Session? {
         DappMQSessionStorage.shared.getAll().first
     }
-
+    
     public var pendingRequests: [Request] {
         RecordStorage.shared.getAllPendingRequests()
     }

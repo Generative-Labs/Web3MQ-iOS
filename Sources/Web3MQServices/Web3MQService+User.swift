@@ -83,16 +83,33 @@ extension Web3MQService {
     }
 
     ///
-    public func userPermissions(userId: String) async throws -> UserPermissions {
+    public func userPermissions(userId: String) async throws -> PermissionResponse {
         guard
             let response =
                 try await client
-                .send(request: UserPermissionsRequest(targetUserId: userId)).data,
-            let permissions = response.permissions
+                .send(request: UserPermissionsRequest(targetUserId: userId)).data
         else {
             throw Web3MQNetworkingError.responseFailed(reason: .dataEmpty)
         }
-        return permissions
+        return response
+    }
+    
+    ///
+    public func permissions() async throws -> UserPermissions {
+        guard
+            let response =
+                try await client
+                .send(request: PermissionSettingsRequest()).data?.permissions
+        else {
+            throw Web3MQNetworkingError.responseFailed(reason: .dataEmpty)
+        }
+        return response
+    }
+    
+    public func updatePermissionSettings(permissions: UserPermissions) async throws {
+        try await client.send(
+            request: UpdatePermissionSettingsRequest(permissions: permissions)
+        )
     }
 
     ///

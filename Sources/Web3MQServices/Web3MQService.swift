@@ -47,8 +47,12 @@ public protocol Service: AnyObject {
     func publicProfile(userId: String, didType: String, didValue: String) async throws
         -> UserProfile
 
-    func userPermissions(userId: String) async throws -> UserPermissions
+    func userPermissions(userId: String) async throws -> PermissionResponse
 
+    func permissions() async throws -> UserPermissions
+    
+    func updatePermissionSettings(permissions: UserPermissions) async throws
+    
     func changeProfile(nickName: String, avatarUrl: String?) async throws -> UserProfile
 
     func updateNotificationStatus(_ notificationIds: [String], status: NotificationStatus)

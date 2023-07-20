@@ -91,7 +91,6 @@ extension ChatsListTableViewCell {
     private func configureHierarchy() {
 
         avatarImageView.image = UIImage(systemName: "person.circle.fill")
-        avatarImageView.backgroundColor = UIComponentConfiguration.shared.colorPalette.accentColor
         avatarImageView.contentMode = .scaleAspectFit
         contentView.addSubview(avatarImageView)
         avatarImageView.snp.makeConstraints { make in
