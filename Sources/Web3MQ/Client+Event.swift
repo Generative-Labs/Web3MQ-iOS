@@ -56,7 +56,7 @@ extension ChatClient {
 
         websocket.connectionStatusSubject.sink { [weak self] status in
             self?.connectionStatusSubject.send(status)
-            if case .connected(let nodeId) = status {
+            if case .connected(let nodeId, _) = status {
                 self?.onConnected(nodeId: nodeId)
             } else if case .disconnected(let source) = status {
                 self?.onDisconnect(source: source)
